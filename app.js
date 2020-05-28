@@ -4,9 +4,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
-
-//calling the date.js file
-const date = require(__dirname + "/date.js");
+const _ = require('lodash');
+const mongoose = require('mongoose');
 
 // to use express package
 const app = express();
@@ -19,31 +18,70 @@ app.use(bodyParser.urlencoded({
 //to use the files in public; in this case css file
 app.use(express.static("public"));
 
-//variables to use
-let item = "";
-let items = [];
-let workitems = [];
-
-//to get the main list page
-app.get("/", function (req, res) {
-
-    //calling a function from date.js file
-    let day = date.getDate();
-
-    //how to render pages in ejs with key:value
-    res.render("list", {
-        listTitle: day,
-        newItems: items
-    });
-
+//connecting mongoose db
+mongoose.connect("mongodb+srv://admin-malley:kapuska742@cluster0-gaudg.mongodb.net/todolistDB", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
 
-//to create a work list page
-app.get("/work", function (req, res) {
-    res.render("list", {
-        listTitle: "Work List",
-        newItems: workitems
+const itemsSchema = {
+    name: String
+};
+
+const Item = mongoose.model("Item", itemsSchema);
+
+
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+};
+
+const List = mongoose.model("List", listSchema);
+
+
+//to get the main main list page
+app.get("/", function (req, res) {
+
+    Item.find({}, function (err, items) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            //to see which items is inside of the results array
+            items.forEach(item => {});
+            res.render("list", {
+                listTitle: "Today",
+                newItems: items
+            });
+        }
+
+    });
+});
+
+app.get("/:customListName", function (req, res) {
+    const customListName = _.capitalize(req.params.customListName);
+
+    List.findOne({
+        name: customListName
+    }, function (err, foundList) {
+        if (!err) {
+            if (!foundList) {
+                const list = new List({
+                    name: customListName,
+                    items: []
+                });
+
+                list.save();
+                res.redirect("/" + customListName);
+            } else {
+                res.render("list", {
+                    listTitle: foundList.name,
+                    newItems: foundList.items
+                });
+            }
+        }
+
     });
 });
 
@@ -51,19 +89,79 @@ app.get("/work", function (req, res) {
 //to post(get) the inputs from user and redirect page
 app.post("/", function (req, res) {
 
-    //sending the written item to target page
-    if (req.body.addList == "Work") {
-        item = req.body.newTaskToDo;
-        workitems.push(item);
-        res.redirect("/work");
+    item = req.body.newItemToAdd;
+    buttonPage = req.body.addedToList;
+  
+    const itemBuffer = new Item({
+        name: item
+    });
+
+    if (item != "" && buttonPage === "Today") {
+        if (item != "" && buttonPage === "Today") {
+
+            itemBuffer.save();
+            res.redirect("/");
+        } else {
+            res.redirect("/");
+        }
+
     } else {
-        item = req.body.newTaskToDo;
-        items.push(item);
-        res.redirect("/");
+        if (item != "") {
+
+            List.findOne({
+                name: buttonPage
+            }, function (err, foundList) {
+                foundList.items.push(itemBuffer);
+                foundList.save();
+            });
+
+            res.redirect("/" + buttonPage);
+        } else {
+            res.redirect("/" + buttonPage);
+        }
     }
 });
 
+
+
+app.post("/delete", function (req, res) {
+
+    const checkedItem = req.body.deletebox;
+    const listName = req.body.listName;
+
+    //selecting the which page we are in first and then selecting the item we wanna delete
+    if (listName === "Today") {
+        Item.findByIdAndRemove(checkedItem, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect("/");
+            }
+        });
+    } else {
+        List.findOneAndUpdate({
+            name: listName
+        }, {
+            $pull: {
+                items: {
+                    _id: checkedItem
+                }
+            }
+        }, function (err, foundList) {
+            if (!err) {
+                res.redirect("/" + listName);
+            }
+        });
+    }
+});
+
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 //port to listen in browser
-app.listen(3000, function () {
+app.listen(port, function () {
     console.log("Server is running now..");
 });

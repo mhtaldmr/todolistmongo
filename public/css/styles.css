@@ -51,7 +51,7 @@ p {
   color: #00204a;
 }
 
-form {
+form.item {
   text-align: center;
   margin-left: 20px;
 }
@@ -93,4 +93,19 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+
+.imglogo{
+  align-items: center;
+  width: 40px;
+  margin: 0;
+  padding: 0;
+}
+.imglogo:hover{
+  transform: scale(1.1);
+}
+
+.footertext{
+  font-size: 17px;
+  opacity: 0.8;
 }
