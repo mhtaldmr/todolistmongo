@@ -8,11 +8,12 @@ html {
 h1 {
   color: #fff;
   padding: 10px;
+  margin-bottom: 8px;
 }
 
 .box {
   max-width: 400px;
-  margin: 50px auto;
+  margin: 40px auto 10px auto;
   background: white;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
@@ -21,6 +22,7 @@ h1 {
 #heading {
   background-color: #A683E3;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .item {
@@ -93,11 +95,12 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+  margin-bottom: 2px;
 }
 
 .imglogo{
   align-items: center;
-  width: 40px;
+  width: 35px;
   margin: 0;
   padding: 0;
 }
@@ -106,6 +109,16 @@ footer {
 }
 
 .footertext{
-  font-size: 17px;
-  opacity: 0.8;
+  font-size: 15px;
+  opacity: 0.6;
+  bottom: 5%;
+  margin-top: 5rem;
+}
+
+.information{
+  font-size: 14px;
+  opacity: 0.6;
+  text-align: center;
+  padding: 0;
+  margin: 0;
 }

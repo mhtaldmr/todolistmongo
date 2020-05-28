@@ -39,7 +39,6 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
-
 //to get the main main list page
 app.get("/", function (req, res) {
 
