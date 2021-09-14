@@ -20,7 +20,7 @@ app.use(express.static("public"));
 
 //connecting mongoose db
 //mongoose.connect("mongodb+srv://malley:kapuska742@cluster0.wk9ld.mongodb.net/todolistDB", {
-mongoose.connect("mongodb+srv://malley:kapuska742@cluster0.wk9ld.mongodb.net/todolistDB",{    
+mongoose.connect("mongodb+srv://malley:kapuska742@cluster0.wk9ld.mongodb.net/todolist",{    
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
