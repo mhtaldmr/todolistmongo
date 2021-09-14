@@ -19,8 +19,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 //connecting mongoose db
-//mongoose.connect("mongodb+srv://malley:kapuska742@cluster0.wk9ld.mongodb.net/todolistDB", {
-mongoose.connect("mongodb+srv://malley:kapuska742@cluster0.wk9ld.mongodb.net/todolist",{    
+mongoose.connect("mongodb+srv://<user>:<password>@cluster0.wk9ld.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",{    
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
